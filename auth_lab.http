@@ -8,11 +8,27 @@
 ### ═══════════════════════════════════════════════════════════════════════════
 ### PHASE 1 — Basic Authentication
 ### ═══════════════════════════════════════════════════════════════════════════
-# TODO: Find the Basic Auth endpoint in api/urls.py.
-# TODO: Write a GET request that sends credentials using the
-#       Authorization: Basic <base64(username:password)> header.
-#       Tip: REST Client supports  Authorization: Basic admin admin123  directly.
+### Phase 1 — Basic Auth (unauthenticated)
+GET http://127.0.0.1:8000/api/basic/ HTTP/1.1
 
+###
+
+### Phase 1 — Basic Auth (with credentials)
+# REST Client encodes username:password in Base64 automatically
+GET http://127.0.0.1:8000/api/basic/ HTTP/1.1
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+###
+
+### Phase 1 — Replay Attack (Synthesis Challenge)
+# An attacker who intercepts the raw Authorization header line off the network
+# can simply paste it directly into their own HTTP request header:
+# Authorization: Basic YWRtaW46YWRtaW4xMjM=
+# This replay attack works because Basic Authentication transmits static, unchanged credentials with every request.
+# Base64 is merely an encoding scheme (obfuscation), NOT encryption. The attacker does not even need to decode
+# the header to obtain the original password; replaying the raw encoded string grants full access.
+GET http://127.0.0.1:8000/api/basic/ HTTP/1.1
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 
 ### ═══════════════════════════════════════════════════════════════════════════
 ### PHASE 3 — Token Authentication (Opaque)

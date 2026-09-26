@@ -30,23 +30,23 @@ from rest_framework.response import Response
 # PHASE 1 — Basic Authentication
 # ─────────────────────────────────────────────────────────────────────────────
 
+
 @api_view(["GET"])
 @authentication_classes([BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def basic_auth_view(request):
-    # ── Driver Task ───────────────────────────────────────────────────────────
-    # TODO: Extract the raw Authorization header from request.META and print
-    #       it to the terminal with a descriptive label.
-    #       Then return: Response({"message": "Check your terminal!"})
-    #
-    # Hint: the header key in request.META is 'HTTP_AUTHORIZATION'.
-    # ─────────────────────────────────────────────────────────────────────────
+    # Extract and print the header
+    auth_header = request.META.get("HTTP_AUTHORIZATION")
+    print(f"Incoming Header: {auth_header}")
 
     # Reporter — Phase 1 challenge answers:
-    # Q1 answer (header format for admin:admin123):
-    # Q2 answer (what happens without credentials):
+    # Q1 answer (format of decoded Base64 string):
+    # The decoded string format is "username:password" (for admin:admin123, it decodes directly to "admin:admin123").
+    #
+    # Q2 answer (security over HTTP vs HTTPS):
+    # Base64 is just a formatting style (like Morse code), not a secret code or lock. Because HTTP is unencrypted, anyone watching the network can capture the header and easily read the password.
 
-    return Response({"message": "Phase 1 stub — Driver: complete the TODO above."})
+    return Response({"message": "Check your terminal!"})
 
 
 # ─────────────────────────────────────────────────────────────────────────────
