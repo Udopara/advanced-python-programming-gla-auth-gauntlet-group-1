@@ -88,9 +88,12 @@ def token_auth_view(request):
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def jwt_protected_view(request):
-    # Reporter — Phase 4 challenge answers:
-    # Q1 answer (fields found in the decoded payload):
-    # Q2 answer (what happens when the signature is tampered):
-    # Synthesis answer (JWT revocation challenge and workaround):
+    # Team Challenge:
+# Besides exp, the JWT payload also includes user_id — that's the identifying field baked in alongside the expiry.
+# The server validates the token without a DB lookup by recomputing the signature from the header+payload using its secret key and comparing it to the token's signature; if they match, it trusts the payload.
+
+# Synthesis Challenge:
+# Tampering with user_id and re-sending returns 401 Unauthorized.
+# Even though the tampered token is still well-formed JSON/base64, editing the payload invalidates the signature, since the signature was computed over the original header+payload with the server's secret key. On verification the server recomputes the signature and it no longer matches, so the token is rejected regardless of how valid the JSON inside looks.
 
     return Response({"message": "JWT authenticated.", "user": request.user.username})
