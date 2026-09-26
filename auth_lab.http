@@ -33,10 +33,20 @@ Authorization: Basic YWRtaW46YWRtaW4xMjM=
 ### ═══════════════════════════════════════════════════════════════════════════
 ### PHASE 3 — Token Authentication (Opaque)
 ### ═══════════════════════════════════════════════════════════════════════════
-# TODO: Generate a DRF token for the admin user first (see lab README).
-# TODO: Find the Token Auth endpoint in api/urls.py.
-# TODO: Write a GET request that sends the token using the
-#       Authorization: Token <your-token> header.
+# Generate a token first with: python manage.py drf_create_token admin
+# Paste the generated token below. Do not commit a real token to the repository.
+@opaqueToken = <paste-generated-token-here>
+
+### Phase 3 — Valid Opaque Token
+GET http://127.0.0.1:8000/api/token/ HTTP/1.1
+Authorization: Token {{opaqueToken}}
+
+###
+
+### Phase 3 — Tampered Opaque Token
+# Change the final character of the generated token before sending this request.
+GET http://127.0.0.1:8000/api/token/ HTTP/1.1
+Authorization: Token <paste-token-with-last-character-changed-here>
 
 
 ### ═══════════════════════════════════════════════════════════════════════════
