@@ -293,9 +293,11 @@ Before you finish, the Reporter fills in this table as a comment block at the to
 
 **Discussion prompts for the team:**
 - In which phase did writing the raw HTTP header in REST Client change your understanding of what Postman was doing automatically?
+Our team found that manually writing the `Authorization: Basic <base64>` header in REST Client was the turning point. Once we had to encode the credentials ourselves and paste the header in by hand, it became obvious that Postman had been silently doing the same thing behind the scenes on every single request. That realization changed how we viewed the whole flow — it was no longer a black box. We started seeing every request as carrying the user's credentials in plain Base64, and we understood why this only makes sense over HTTPS. It also made us appreciate how much tooling hides from developers and how important it is to know what's actually on the wire.
 - Which method would you choose for a mobile app that needs to work offline? Why?
+As a team, we agreed on JWT. The main reason is that it's stateless — the token can be stored securely on the device (Keychain on iOS, Keystore on Android), and the app can keep making requests without depending on the server to remember a session. That fits an offline-first mobile app far better than session auth, which relies on server-side session state that expires and can't be validated without a live connection. Basic Auth was ruled out immediately because it would require storing the user's password on the device, which is a serious security risk. We also noted that JWTs have an expiry, so the app needs a refresh strategy, but that's manageable.
 - Which method is safest over a network you don't control?
-
+Our group's conclusion: none of them on plain HTTP. On an untrusted network, anyone sniffing traffic can read whatever is sent — whether that's a Base64 Basic header, a session cookie, or a JWT. Once the transport is HTTPS, all four methods are reasonably protected in transit, but we ranked them: Session and JWT are safer than Basic because the raw password is never resent on each request. Basic Auth resends credentials every time, so a single TLS misconfiguration or downgrade attack is far more damaging. The bigger takeaway for our team is that authentication is only as strong as the transport layer underneath it — without encryption, the whole auth architecture is an illusion.
 ---
 
 *Good luck — and remember: if your transport layer is unencrypted, your entire authentication architecture is a complete illusion.*
