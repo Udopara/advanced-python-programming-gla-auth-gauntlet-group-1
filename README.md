@@ -284,10 +284,10 @@ Before you finish, the Reporter fills in this table as a comment block at the to
 # | Method            | Stateful?  | DB Lookup?| Credentials sent  | Safe on  |
 # |                   |            |           | every request?    | HTTP?    |
 # +-------------------+------------+-----------+-------------------+----------+
-# | Basic Auth        |            |           |                   |          |
-# | Session Auth      |            |           |                   |          |
-# | Opaque Token Auth |            |           |                   |          |
-# | JWT               |            |           |                   |          |
+# | Basic Auth        |   No       | No     |           Yes           |     No     |
+# | Session Auth      |      Yes      |  Yes         |     No              |       No   |
+# | Opaque Token Auth |    No        |      No     |         Yes          |      No    |
+# | JWT               |         No   |   No        |                Yes   |      No    |
 # +-------------------+------------+-----------+-------------------+----------+
 ```
 
