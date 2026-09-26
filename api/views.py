@@ -59,7 +59,11 @@ def basic_auth_view(request):
 def session_auth_view(request):
     # Reporter — Phase 2 challenge answers:
     # Q1 answer (effect of deleting the session cookie):
-    # Synthesis answer (how session fixation works):
+    # The browser is logged out because it no longer sends the sessionid cookie; the matching session record can
+    # still remain in Django's server-side session database until it expires or is invalidated.
+    # Synthesis answer (session hijacking):
+    # Restoring the copied sessionid cookie restores access while its server-side session remains valid. An attacker
+    # who steals that cookie can impersonate the user without knowing the password; this is session hijacking.
 
     return Response({"message": "Session authenticated.", "user": request.user.username})
 
