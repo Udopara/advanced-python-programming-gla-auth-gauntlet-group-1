@@ -59,7 +59,11 @@ def basic_auth_view(request):
 def session_auth_view(request):
     # Reporter — Phase 2 challenge answers:
     # Q1 answer (effect of deleting the session cookie):
-    # Synthesis answer (how session fixation works):
+    # The browser is logged out because it no longer sends the sessionid cookie; the matching session record can
+    # still remain in Django's server-side session database until it expires or is invalidated.
+    # Synthesis answer (session hijacking):
+    # Restoring the copied sessionid cookie restores access while its server-side session remains valid. An attacker
+    # who steals that cookie can impersonate the user without knowing the password; this is session hijacking.
 
     return Response({"message": "Session authenticated.", "user": request.user.username})
 
@@ -74,8 +78,13 @@ def session_auth_view(request):
 def token_auth_view(request):
     # Reporter — Phase 3 challenge answers:
     # Q1 answer (status code when token is tampered):
+    # A tampered or invalid opaque token returns HTTP 401 Unauthorized.
     # Q2 answer (algorithm used to hash admin's password in the DB):
+    # The password starts with the pbkdf2_sha256 algorithm prefix; Django stores a salted hash instead of admin123 as plaintext.
     # Synthesis answer (how to revoke a token):
+    # An administrator must delete the stolen token from the database, which permanently invalidates it for future requests.
+    # A JWT is not normally stored in that token table, so it cannot be revoked the same way; it must expire, or a blacklist/
+    # server-side denylist must be added to track revoked JWTs.
 
     return Response({"message": "Token authenticated.", "user": request.user.username})
 
